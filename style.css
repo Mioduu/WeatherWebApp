@@ -1,0 +1,87 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: #36454F;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+h1 {
+    color: #FAF9F6;
+    display: flex;
+    justify-content: center;
+    font-size: 4rem;
+    text-shadow: 2px 2px 3px black;
+}
+
+label {
+    display: flex;
+    justify-content: center;
+    color: #FAF9F6;
+    margin-top: 5rem;
+    text-shadow: 2px 2px 3px black;
+    font-size: 2rem;
+} 
+
+input {
+    display: flex;
+    justify-self: center;
+    background-color: #d4d4d2;
+    width: 15rem;
+    height: 2rem;
+    font-size: xx-large;
+}
+
+button {
+    display: flex;
+    justify-self: center;
+    margin-top: 8px;
+    background-color: #d4d4d2;
+    justify-content: center;
+    color: black;
+    padding: 5px;
+    font-size: 1rem;
+    width: 10rem;
+    height: 2rem;
+}
+
+#weatherTable {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 50%;
+    justify-self: center;
+}
+
+#weatherTable tr {
+    width: 300px;
+}
+
+#weatherTable th {
+    font-weight: 800;
+    font-size: 32px;
+    background-color: #242b30;
+    color: white;
+}
+
+#weatherTable th,
+#weatherTable td {
+    border: 3px solid #000000;
+    padding: 5px 10px;
+    text-align: center;
+}
+
+#weatherTable td {
+    font-size: 24px;
+}
+
+#weatherTable td:first-child {
+    font-weight: 600;
+    width: 300px;
+}
+
+#weatherTable td:last-child {
+    font-weight: 800;
+    width: 300px;
+}
+
+
+
