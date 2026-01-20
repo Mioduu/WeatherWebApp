@@ -5,27 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Weather App</h1>
     <div id="searchBox">
         <form id="weatherForm">
+            <h1 id="locationName"></h1>
+            <h2 id="currentDate"></h2>
             <label for="location">Enter your location</label>
             <input type="text" id="location" name="location">
             <button type="submit">Check Weather</button>
         </form>
     </div>
-    <table id="weatherTable">
-        <thead>
-            <tr>
-                <th>Time</th>
-                <th>Temperature</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
+    <div id="scrollWeatherBar">
+        
+    </div>
     <script type="module" src="main.js"></script>
 </body>
 </html> 
