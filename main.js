@@ -7,10 +7,8 @@ import { getWeather } from "./functions/getweather.js" // Pogoda z Open meteo
 
 // ŁADOWANIE DOM
 document.addEventListener("DOMContentLoaded", () => {
-    var currentHour = new Date()
-        currentHour.getHours()
-    setBackground(currentHour)
-
+    let dayPrimaryText = "#2B2B2B"
+    let dayBgColor = "rgba(255, 255, 255, 0.75)"
     const today = new Date()
 
     const months = [
@@ -31,12 +29,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const day = today.getDate()
     const monthName = months[today.getMonth()]
     const dayOfTheWeek = daysOfWeek[today.getDay()]
+    const currentTime = today.getHours()
+    setBackground(currentTime)
 
     const form = document.getElementById("weatherForm") // Cały forms
     const locationInput = document.getElementById("location") // Input do miejscowości
     let currentDateDiv = document.getElementById("currentDate")
     let locationName = document.getElementById("locationName")
     let weatherScrollableBar = document.getElementById("scrollWeatherBar")
+    let midWeatherMenu = document.getElementById("midWeather")
     weatherScrollableBar.style.display = "none"
     currentDateDiv.textContent = `${day} ${monthName}, ${dayOfTheWeek}`
 
@@ -50,6 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Funkcja do formsów zwraca mi value wpisane w inputa po naciśnięciu przycisku
     form.addEventListener("submit", async (e) => {
         e.preventDefault()
+
+        const hours = new Date().getHours()
+        setBackground(hours)
         weatherScrollableBar.innerHTML = ""
         const locationValue = locationInput.value.trim() // Value z boxa
         console.log(`Szukam miasta: ${locationValue}`)
@@ -81,9 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
             timeTag.textContent = formattedTime[i]
             timeTag.style.fontSize = "0.8em"
             timeTag.style.marginBottom = "4px"
+            timeTag.style.color = (hours >= 6 && hours < 18) ? dayPrimaryText : "white"
 
             const tempTag = document.createElement("div")
             tempTag.textContent = formattedTemperature[i]
+            tempTag.style.color = (hours >= 6 && hours < 18) ? dayPrimaryText : "white"
 
             const emojiTag = document.createElement("div")
             emojiTag.style.fontSize = "1.5em"
@@ -94,6 +100,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
             emojiTag.textContent = emoji
 
+            if(hours == hour) {
+                midWeatherMenu.innerHTML = ""
+                midWeatherMenu.style.marginTop = "110px"
+                midWeatherMenu.style.display = "flex"
+                midWeatherMenu.style.justifyContent = "center"
+                midWeatherMenu.style.flexDirection = "column"
+                midWeatherMenu.style.alignItems = "center"
+                
+                let currentWeather = document.createElement("div")
+                currentWeather.textContent = "Current Weather:"
+                currentWeather.style.fontSize = "3rem"
+                currentWeather.style.color = "white"
+                currentWeather.style.marginBottom = "10px"
+                let timeClone = timeTag.cloneNode(true)
+                let emojiClone = emojiTag.cloneNode(true)
+                let tempClone = tempTag.cloneNode(true)
+
+                timeClone.style.fontSize = "4rem"
+                timeClone.style.color = "white"
+                emojiClone.style.fontSize = "4rem"
+                tempClone.style.fontSize = "4rem"
+                tempClone.style.color = "white"
+
+                if(hours >= 6 && hours < 18) {
+                    weatherScrollableBar.style.backgroundColor = dayBgColor
+                    weatherScrollableBar.style.border = dayBgColor
+                    weatherScrollableBar.style.color = dayPrimaryText
+                    currentWeather.style.color = dayPrimaryText
+                    timeClone.style.color = dayPrimaryText
+                    tempClone.style.color = dayPrimaryText
+                }
+                midWeatherMenu.appendChild(currentWeather)
+                midWeatherMenu.appendChild(timeClone)
+                midWeatherMenu.appendChild(emojiClone)
+                midWeatherMenu.appendChild(tempClone)
+            }
             container.appendChild(timeTag)
             container.appendChild(emojiTag)
             container.appendChild(tempTag)

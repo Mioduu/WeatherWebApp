@@ -1,6 +1,6 @@
 export async function getWeather(lat, lon) {
     try {
-        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m`)
+        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m&timezone=auto`)
 
         if(!res.ok) {
             throw new Error(`Błąd sieci: ${res.status}`)
