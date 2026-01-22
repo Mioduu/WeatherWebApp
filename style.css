@@ -119,3 +119,12 @@ button:hover {
     text-decoration: none;
 }
 
+#localUserArea {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+}

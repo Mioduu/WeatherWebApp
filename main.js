@@ -1,12 +1,85 @@
 // IMPORTY Z FUNKCJAMI
 import { setBackground } from "./functions/daynightcycle.js"
 import { getCoordinates } from "./functions/geolocation.js" // Koordynaty z Open meteo
+import { getUserPosition } from "./functions/getcurrentposition.js"
 import { getMoonEmoji } from "./functions/getemoji.js"
+import { getUserCity } from "./functions/reverselocation.js"
 import { getCityData } from "./functions/getplacename.js"
 import { getWeather } from "./functions/getweather.js" // Pogoda z Open meteo
+import { getCurrentLocalWeather } from "./functions/getlocalweather.js"
+
+async function getUserLocationData() {
+    try {   
+        const coords = await getUserPosition()
+        console.log(coords)
+
+        if (!coords) {
+            console.log("Cannot get your position")
+            return
+        }
+
+        const place = await getUserCity(coords.lat, coords.lon)
+
+        const { city: userCityName, country: userCountryName } = place
+
+        const userWeatherData = await getWeather(coords.lat, coords.lon)  // NIE RUSZAĆ BO JEBNIE
+        
+        const userWeatherTime = userWeatherData?.hourly?.time
+        const userWeatherDataInfo = userWeatherData?.hourly?.temperature_2m 
+        console.log(userWeatherData)
+        
+        return {
+            userCityName: userCityName,
+            userCountryName: userCountryName,
+            userWeatherData: userWeatherDataInfo,
+            userWeatherTime: userWeatherTime
+        }
+
+    } catch(err) {
+        console.error("Error:", err)
+    } 
+    
+}
+
+function createLocalData(city, country, weather, time) {  // Tworzy lokalne info w rogu
+    const localDataDiv = document.getElementById("localUserArea")
+    const container = document.createElement("div")
+    container.style.display = "flex"
+    container.style.flexDirection = "column"
+    container.style.gap = "8px"
+    container.style.textAlign = "center"
+    container.style.fontSize = "18px"
+    container.style.border = "3px solid #01162E"
+    container.style.borderRadius = "16px"
+    container.style.backgroundColor = "#01162E"
+
+    const cityName = document.createElement("div")
+    cityName.textContent = city + " " + country
+    cityName.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
+
+    let fullLocalInfo = getCurrentLocalWeather(time, weather)
+    let weatherInfo = document.createElement("div")
+    let weatherTemp = document.createElement("div")
+    weatherInfo.textContent = `${fullLocalInfo.hour}`
+    weatherTemp.textContent = `${fullLocalInfo.temperature}°C`
+    weatherTemp.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
+    weatherInfo.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
+
+    container.append(cityName)
+    container.append(weatherInfo)
+    container.append(weatherTemp)
+    localDataDiv.appendChild(container)
+
+    // TODO: Dodać clickable obiekt żeby sprawdzić aktualną pogode dla lokalizacja użytkownika (będzie super zabawa :DDDD)
+}
+
 
 // ŁADOWANIE DOM
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    const localData = await getUserLocationData()
+    if (localData) {
+        createLocalData(localData.userCityName, localData.userCountryName, localData.userWeatherData, localData.userWeatherTime)
+    }
     let dayPrimaryText = "#2B2B2B"
     let dayBgColor = "rgba(255, 255, 255, 0.75)"
     const today = new Date()
@@ -32,6 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentTime = today.getHours()
     setBackground(currentTime)
 
+    
     const form = document.getElementById("weatherForm") // Cały forms
     const locationInput = document.getElementById("location") // Input do miejscowości
     let currentDateDiv = document.getElementById("currentDate")

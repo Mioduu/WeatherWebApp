@@ -11,7 +11,7 @@ export async function getCoordinates(city) {
         console.log("(getCoordinates) Dane z fetcha: ", data)
 
         if(!data || !data.results || data.results.length === 0)  {
-            throw new Error("Nie odnaleziono miasta: ", city)
+            throw new Error("Nie odnaleziono miasta: " + city)
         }
 
         return {
