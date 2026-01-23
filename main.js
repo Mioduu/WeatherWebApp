@@ -59,15 +59,16 @@ function createLocalData(city, country, weather, time) {  // Tworzy lokalne info
 
     let fullLocalInfo = getCurrentLocalWeather(time, weather)
     let weatherInfo = document.createElement("div")
-    let weatherTemp = document.createElement("div")
-    weatherInfo.textContent = `${fullLocalInfo.hour}`
-    weatherTemp.textContent = `${fullLocalInfo.temperature}°C`
-    weatherTemp.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
+    let emojiDiv = document.createElement("div")
+
+    emojiDiv.textContent = `${fullLocalInfo.hour} ${getMoonEmoji(fullLocalInfo.hour.slice(0,2))}`
+    emojiDiv.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
+    weatherInfo.textContent = `${fullLocalInfo.temperature}°C`
     weatherInfo.style.color = (time >= 6 && time < 18) ? dayPrimaryText : "white"
 
     container.append(cityName)
+    container.append(emojiDiv)
     container.append(weatherInfo)
-    container.append(weatherTemp)
     localDataDiv.appendChild(container)
 
     // TODO: Dodać clickable obiekt żeby sprawdzić aktualną pogode dla lokalizacja użytkownika (będzie super zabawa :DDDD)
@@ -138,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if(!coords) {
             console.log("Koordynaty nie istnieją elo")
         }
-        scrollWeatherBar.style.display = "inline-block"
+        weatherScrollableBar.style.display = "inline-block"
         const weatherData = await getWeather(coords.lat, coords.lon) // Fetch z pogodą
         const temperatures = weatherData?.hourly?.temperature_2m // Temperaturki
         const time = weatherData?.hourly?.time // Godziny od temperatur
@@ -170,6 +171,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             emojiTag.style.margin = "0 0 4px 0"
 
             const hour = parseInt(formattedTime[i].slice(0, 2))
+            console.log(formattedTime[i])
+            console.log(formattedTime[i].slice(0,2))
             const emoji = getMoonEmoji(hour)
 
             emojiTag.textContent = emoji
@@ -210,10 +213,37 @@ document.addEventListener("DOMContentLoaded", async () => {
                 midWeatherMenu.appendChild(emojiClone)
                 midWeatherMenu.appendChild(tempClone)
             }
+
             container.appendChild(timeTag)
             container.appendChild(emojiTag)
             container.appendChild(tempTag)
             weatherScrollableBar.appendChild(container)
+
+            emojiTag.addEventListener("click", () => {
+                midWeatherMenu.innerHTML = ""
+
+                let currentWeather = document.createElement("div")
+                currentWeather.textContent = "Current Weather:"
+                currentWeather.style.fontSize = "3rem"
+                currentWeather.style.color = "white"
+                currentWeather.style.marginBottom = "10px"
+
+                const timeClone = timeTag.cloneNode(true)
+                const emojiClone = emojiTag.cloneNode(true)
+                const tempClone = tempTag.cloneNode(true)
+
+                timeClone.style.fontSize = "4rem"
+                timeClone.style.color = "white"
+                emojiClone.style.fontSize = "4rem"
+                tempClone.style.fontSize = "4rem"
+                tempClone.style.color = "white"
+
+                midWeatherMenu.appendChild(currentWeather)
+                midWeatherMenu.appendChild(timeClone)
+                midWeatherMenu.appendChild(emojiClone)
+                midWeatherMenu.appendChild(tempClone)
+                
+            })
             
         }
     })
