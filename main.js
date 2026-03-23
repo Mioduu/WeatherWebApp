@@ -148,7 +148,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         locationName.style.display = "flex"
         locationName.style.justifyContent = "center"
         locationName.textContent = `✈ ${cityData.name} ${cityData.country} ${cityData.code}`
-        
+        const tempList = temperatures.slice(0, 25)
+        const maxTempFixed = Math.max(...tempList).toFixed(2)
+        const minTempFixed = Math.min(...tempList).toFixed(2)
+        console.log(temperatures)
+        console.log(maxTempFixed)
+        console.log(minTempFixed)
+
         // SCROLLBAR
         for(let i = 0; i < 25; i++) {
             const container = document.createElement("div")
@@ -194,6 +200,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 let emojiClone = emojiTag.cloneNode(true)
                 let tempClone = tempTag.cloneNode(true)
 
+                var weatherMinMaxContainer = document.createElement("div")
+                weatherMinMaxContainer.textContent = `Min: ${minTempFixed}°C | Max: ${maxTempFixed}°C`
+                weatherMinMaxContainer.style.fontSize = "1.5rem"
+                weatherMinMaxContainer.style.color = "white"
+                weatherMinMaxContainer.style.marginBottom = "5px"
+
                 timeClone.style.fontSize = "4rem"
                 timeClone.style.color = "white"
                 emojiClone.style.fontSize = "4rem"
@@ -205,6 +217,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                     weatherScrollableBar.style.border = dayBgColor
                     weatherScrollableBar.style.color = dayPrimaryText
                     currentWeather.style.color = dayPrimaryText
+                    weatherMinMaxContainer.style.backgroundColor = dayBgColor
+                    weatherMinMaxContainer.style.color = dayPrimaryText
                     timeClone.style.color = dayPrimaryText
                     tempClone.style.color = dayPrimaryText
                 }
@@ -212,6 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 midWeatherMenu.appendChild(timeClone)
                 midWeatherMenu.appendChild(emojiClone)
                 midWeatherMenu.appendChild(tempClone)
+                midWeatherMenu.appendChild(weatherMinMaxContainer)
             }
 
             container.appendChild(timeTag)
@@ -242,6 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 midWeatherMenu.appendChild(timeClone)
                 midWeatherMenu.appendChild(emojiClone)
                 midWeatherMenu.appendChild(tempClone)
+                midWeatherMenu.appendChild(weatherMinMaxContainer)
                 
             })
             
